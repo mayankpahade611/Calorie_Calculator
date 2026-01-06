@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 class Userprofile(models.Model):
     GENDER_CHOICES = [
@@ -30,7 +31,6 @@ class Userprofile(models.Model):
 
     def __str__(self):
         return f"Profile {self.id} ({self.goal})"
-    
 
 
 class CalorieResult(models.Model):
@@ -41,9 +41,7 @@ class CalorieResult(models.Model):
     ]
 
     user_profile = models.ForeignKey(
-        Userprofile,
-        on_delete=models.CASCADE,
-        related_name="results"
+        Userprofile, on_delete=models.CASCADE, related_name="results"
     )
     bmr = models.FloatField()
     maintenance_calories = models.FloatField()
@@ -53,13 +51,11 @@ class CalorieResult(models.Model):
 
     def __str__(self):
         return f"Result for Profile {self.user_profile.id}"
-    
+
 
 class DietPlan(models.Model):
     calorie_result = models.OneToOneField(
-        CalorieResult,
-        on_delete=models.CASCADE,
-        related_name="diet_plan"
+        CalorieResult, on_delete=models.CASCADE, related_name="diet_plan"
     )
 
     breakfast_calories = models.IntegerField()
@@ -67,7 +63,6 @@ class DietPlan(models.Model):
     dinner_calories = models.IntegerField()
     snacks_calories = models.IntegerField()
     guidelines = models.TextField()
-
 
     def __str__(self):
         return f"Diet Plan for Result {self.calorie_result.id}"
