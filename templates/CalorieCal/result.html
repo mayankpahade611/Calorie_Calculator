@@ -1,0 +1,36 @@
+{% extends "CalorieCal/base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center;">Your Daily Plan</h2>
+
+<div class="section">
+    <h3>Calorie Summary</h3>
+    <p><strong>BMR:</strong> {{ result.bmr }} kcal</p>
+    <p><strong>Maintenance:</strong> {{ result.maintenance_calories }} kcal</p>
+    <p><strong>Target ({{ result.goal|title }}):</strong> {{ result.target_calories }} kcal</p>
+</div>
+
+<div class="section">
+    <h3>Meal Distribution</h3>
+
+    <div class="meal"><span>🍳 Breakfast</span><span>{{ plan.breakfast_calories }} kcal</span></div>
+    <div class="meal"><span>🍛 Lunch</span><span>{{ plan.lunch_calories }} kcal</span></div>
+    <div class="meal"><span>🍽 Dinner</span><span>{{ plan.dinner_calories }} kcal</span></div>
+    <div class="meal"><span>🍪 Snacks</span><span>{{ plan.snacks_calories }} kcal</span></div>
+</div>
+
+<div class="section">
+    <h3>Guidelines</h3>
+    <ul class="guidelines">
+        {% for tip in guidelines %}
+            <li>{{ tip }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="back-link">
+    <a href="/">← Calculate Again</a>
+</div>
+
+{% endblock %}
