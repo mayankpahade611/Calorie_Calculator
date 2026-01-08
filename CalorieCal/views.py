@@ -2,16 +2,27 @@ from django.shortcuts import render, redirect
 
 from .forms import UserProfileForm
 from .models import CalorieResult, DietPlan
-from .services.calorie import calculate_bmr, calculate_maintenance_calories, calculate_target_calories
+from .services.calorie import (
+    calculate_bmr,
+    calculate_maintenance_calories,
+    calculate_target_calories,
+)
 from .services.planner import generate_diet_plan
 
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from .forms import SignupForm
+
+
+@login_required
 def calorie_input_view(request):
     if request.method == "POST":
         form = UserProfileForm(request.POST)
 
         if form.is_valid():
-            profile = form.save()
-
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
 
             bmr = calculate_bmr(
                 profile.age,
@@ -30,7 +41,6 @@ def calorie_input_view(request):
                 profile.goal,
             )
 
-
             result = CalorieResult.objects.create(
                 user_profile=profile,
                 bmr=round(bmr, 2),
@@ -39,8 +49,7 @@ def calorie_input_view(request):
                 goal=profile.goal,
             )
 
-
-            #Diet Plan
+            # Diet Plan
             plan, guidelines = generate_diet_plan(target, profile.goal)
 
             diet_plan = DietPlan.objects.create(
@@ -49,11 +58,11 @@ def calorie_input_view(request):
                 lunch_calories=plan["lunch"],
                 dinner_calories=plan["dinner"],
                 snacks_calories=plan["snacks"],
-                guidelines="\n".join(guidelines)
+                guidelines="\n".join(guidelines),
             )
 
             return redirect("result", result_id=result.id)
-        
+
     else:
         form = UserProfileForm()
 
@@ -74,3 +83,21 @@ def result_view(request, result_id):
     }
 
     return render(request, "CalorieCal/result.html", context)
+
+
+
+
+def signup_view(request):
+
+    if request.method == "POST":
+        form = SignupForm(request.POST)
+
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("input")   
+
+    else:
+        form = SignupForm()
+
+    return render(request, "CalorieCal/signup.html", {"form": form})

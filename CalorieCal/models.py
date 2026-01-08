@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -21,6 +22,7 @@ class Userprofile(models.Model):
         ("gain", "Weight Gain"),
     ]
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profiles")
     age = models.PositiveIntegerField()
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES)
     height_cm = models.FloatField(help_text="Height in centimeters")
