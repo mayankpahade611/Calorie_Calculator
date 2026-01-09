@@ -1,0 +1,32 @@
+{% extends "CalorieCal/base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center;">Your Diet History</h2>
+
+{% if results %}
+
+    {% for r in results %}
+        <div class="section">
+            <p><strong>Date:</strong> {{ r.created_at|date:"d M Y, H:i" }}</p>
+            <p><strong>Goal:</strong> {{ r.goal|title }}</p>
+            <p><strong>Target Calories:</strong> {{ r.target_calories }} kcal</p>
+
+            <p style="margin-top:8px;">
+                🍳 {{ r.diet_plan.breakfast_calories }} |
+                🍛 {{ r.diet_plan.lunch_calories }} |
+                🍽 {{ r.diet_plan.dinner_calories }} |
+                🍪 {{ r.diet_plan.snacks_calories }}
+            </p>
+
+            <a href="{% url 'result' r.id %}" style="color:#2f855a; font-weight:600;">
+                View Full Plan →
+            </a>
+        </div>
+    {% endfor %}
+
+{% else %}
+    <p style="text-align:center;">No diet plans yet. Calculate your first plan!</p>
+{% endif %}
+
+{% endblock %}

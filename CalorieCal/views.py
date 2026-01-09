@@ -101,3 +101,15 @@ def signup_view(request):
         form = SignupForm()
 
     return render(request, "CalorieCal/signup.html", {"form": form})
+
+
+def history_view(request):
+
+    results = (
+        CalorieResult.objects
+        .filter(user_profile__user=request.user)    
+        .select_related("user_profile")
+        .order_by("-created_at")
+    )
+
+    return render(request, "CalorieCal/history.html", {"results": results})
