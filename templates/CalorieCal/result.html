@@ -29,8 +29,23 @@
     </ul>
 </div>
 
+<div class="section">
+    <h3>Your Diet Suggestions</h3>
+
+    {% if plan.ai_suggestion %}
+        <p style="white-space: pre-line;">
+            {{ plan.ai_suggestion }}
+        </p>
+    {% else %}
+        <p style="color:gray;">Generating AI suggestions... Refresh in few seconds.</p>
+    {% endif %}
+</div>
+
+
+
 <div class="back-link">
     <a href="/">← Calculate Again</a>
 </div>
+
 
 {% endblock %}

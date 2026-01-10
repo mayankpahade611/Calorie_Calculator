@@ -13,6 +13,8 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import SignupForm
 
+from .services.async_ai import generate_ai_async
+
 
 @login_required
 def calorie_input_view(request):
@@ -60,6 +62,13 @@ def calorie_input_view(request):
                 snacks_calories=plan["snacks"],
                 guidelines="\n".join(guidelines),
             )
+
+            generate_ai_async(
+                diet_plan_id=diet_plan.id,
+                calories=target,
+                goal=profile.goal   
+            )
+
 
             return redirect("result", result_id=result.id)
 
@@ -113,3 +122,5 @@ def history_view(request):
     )
 
     return render(request, "CalorieCal/history.html", {"results": results})
+
+

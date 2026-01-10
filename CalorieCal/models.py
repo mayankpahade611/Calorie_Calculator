@@ -64,7 +64,9 @@ class DietPlan(models.Model):
     lunch_calories = models.IntegerField()
     dinner_calories = models.IntegerField()
     snacks_calories = models.IntegerField()
+
     guidelines = models.TextField()
+    ai_suggestion = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f"Diet Plan for Result {self.calorie_result.id}"
